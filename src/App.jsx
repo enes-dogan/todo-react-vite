@@ -3,15 +3,19 @@ import './styles.css';
 
 export default function App(params) {
   const [newItem, setNewItem] = useState('');
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(['array']);
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    setTodos([
-      ...todos,
-      { id: crypto.randomUUID(), title: newItem, completed: false },
-    ]);
+    setTodos((todosParam) => {
+      // setTodos first parameter is assigned to the state value
+      // which is the current value for whatever the current state is (empty initialy)
+      return [
+        ...todosParam,
+        { id: crypto.randomUUID(), title: newItem, completed: false },
+      ];
+    });
   }
 
   console.log(todos);

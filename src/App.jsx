@@ -3,22 +3,42 @@ import './styles.css';
 
 export default function App(params) {
   const [newItem, setNewItem] = useState('');
-  const [todos, setTodos] = useState(['array']);
+  const [todos, setTodos] = useState([]);
 
   function handleSubmit(event) {
     event.preventDefault();
+    if (newItem.trim()) {
+      setTodos((todosParam) => {
+        // setTodos first parameter is assigned to the state value
+        // which is the current value for whatever the current state is (empty initialy)
+        return [
+          // we return setTodos because if we use 2nd time it doesn't work otherwise
+          ...todosParam,
+          { id: crypto.randomUUID(), title: newItem, completed: false },
+        ];
+      });
+    }
 
+    setNewItem('');
+  }
+
+  function toogleTodo(id, completed) {
     setTodos((todosParam) => {
-      // setTodos first parameter is assigned to the state value
-      // which is the current value for whatever the current state is (empty initialy)
-      return [
-        ...todosParam,
-        { id: crypto.randomUUID(), title: newItem, completed: false },
-      ];
+      return todosParam.map((todo) => {
+        if (todo.id === id) {
+          return { ...todo, completed };
+        }
+
+        return todo;
+      });
     });
   }
 
-  console.log(todos);
+  function deleteTodo(id) {
+    setTodos((todosParam) => {
+      return todosParam.filter((todo) => todo.id !== id);
+    });
+  }
 
   return (
     <>
@@ -27,7 +47,9 @@ export default function App(params) {
           <label htmlFor='item'>New Item</label>
           <input
             value={newItem}
-            onChange={(event) => setNewItem(event.target.value)}
+            onChange={function (event) {
+              setNewItem(event.target.value);
+            }}
             type='text'
             id='item'
           />
@@ -36,22 +58,30 @@ export default function App(params) {
       </form>
       <h1 className='header'>Todo List</h1>
       <ul className='list'>
-        <li>
-          <label>
-            <input type='checkbox' />
-            Item 1
-          </label>
-          <button className='btn btn-danger'>Delete</button>
-        </li>
-        <li>
-          <label>
-            <input type='checkbox' />
-            Item 2
-          </label>
-          <button className='btn btn-danger'>Delete</button>
-        </li>
+        {todos.length === 0 && 'No todos'} 
+        {todos.map((todo) => {
+          return (
+            <li key={todo.id}>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={todo.completed}
+                  onChange={(event) =>
+                    toogleTodo(todo.id, event.target.checked)
+                  }
+                />
+                {todo.title}
+              </label>
+              <button
+                onClick={() => deleteTodo(todo.id)}
+                className='btn btn-danger'
+              >
+                Delete
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </>
   );
 }
- 

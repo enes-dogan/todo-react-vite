@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './styles.css';
 
+// eslint-disable-next-line no-unused-vars
 export default function App(params) {
   const [newItem, setNewItem] = useState('');
   const [todos, setTodos] = useState([]);
@@ -10,7 +11,7 @@ export default function App(params) {
     if (newItem.trim()) {
       setTodos((todosParam) => {
         // setTodos first parameter is assigned to the state value
-        // which is the current value for whatever the current state is (empty initialy)
+        // which is the current value for whatever the current state is (empty initially)
         return [
           // we return setTodos because if we use 2nd time it doesn't work otherwise
           ...todosParam,
@@ -22,7 +23,7 @@ export default function App(params) {
     setNewItem('');
   }
 
-  function toogleTodo(id, completed) {
+  function toggleTodo(id, completed) {
     setTodos((todosParam) => {
       return todosParam.map((todo) => {
         if (todo.id === id) {
@@ -67,7 +68,7 @@ export default function App(params) {
                   type='checkbox'
                   checked={todo.completed}
                   onChange={(event) =>
-                    toogleTodo(todo.id, event.target.checked)
+                    toggleTodo(todo.id, event.target.checked)
                   }
                 />
                 {todo.title}

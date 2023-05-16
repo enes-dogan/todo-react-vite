@@ -9,12 +9,12 @@ export default function App(params) {
   function handleSubmit(event) {
     event.preventDefault();
     if (newItem.trim()) {
-      setTodos((todosParam) => {
+      setTodos((currentTodos) => {
         // setTodos first parameter is assigned to the state value
         // which is the current value for whatever the current state is (empty initially)
         return [
           // we return setTodos because if we use 2nd time it doesn't work otherwise
-          ...todosParam,
+          ...currentTodos,
           { id: crypto.randomUUID(), title: newItem, completed: false },
         ];
       });
@@ -24,20 +24,20 @@ export default function App(params) {
   }
 
   function toggleTodo(id, completed) {
-    setTodos((todosParam) => {
-      return todosParam.map((todo) => {
+    setTodos((currentTodos) => {
+      return currentTodos.map((todo) => {
         if (todo.id === id) {
           return { ...todo, completed };
-        }
-
+        } // Same as return { ...todo, completed:completed };
+        //i.e javascript shorthand property assignment
         return todo;
       });
     });
   }
 
   function deleteTodo(id) {
-    setTodos((todosParam) => {
-      return todosParam.filter((todo) => todo.id !== id);
+    setTodos((currentTodos) => {
+      return currentTodos.filter((todo) => todo.id !== id);
     });
   }
 
@@ -59,10 +59,10 @@ export default function App(params) {
       </form>
       <h1 className='header'>Todo List</h1>
       <ul className='list'>
-        {todos.length === 0 && 'No todos'} 
+        {todos.length === 0 && 'No todos'}
         {todos.map((todo) => {
           return (
-            <li key={todo.id}>
+            <li key={todo.id} id={todo.id}>
               <label>
                 <input
                   type='checkbox'
